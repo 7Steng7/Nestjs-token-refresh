@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 // import { AuthModule } from './auth/auth.module';
 import { PasswordService } from './services/password/password.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { PasswordService } from './services/password/password.service';
       `mongodb+srv://${process.env.NAMEUSERDATABASE}:${process.env.PASSWORDDATABASE}@stengclusterblog.vgezi.mongodb.net/broers`,
     ),
     UsersModule,
+    AuthModule,
   ],
   providers: [PasswordService],
 })

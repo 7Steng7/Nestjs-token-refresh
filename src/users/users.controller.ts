@@ -43,7 +43,15 @@ import {
       }
       return user;
     }
-  
+
+    @ApiOperation({ summary: 'Obtener un usuario por correo electrónico' })
+    @ApiResponse({ status: 200, description: 'Usuario encontrado' })
+    @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+    @Get('email/:email')
+    async findByEmail(@Param('email') email: string) {
+      return this.usersService.findByEmail(email);
+    }
+ 
     @ApiOperation({ summary: 'Crear un nuevo usuario' })
     @ApiResponse({ status: 201, description: 'Usuario creado' })
     @ApiBody({ type: CreateUserDto })
