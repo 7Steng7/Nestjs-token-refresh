@@ -7,10 +7,12 @@ import {
     Put,
     Delete,
     NotFoundException,
+    UseGuards,
   } from '@nestjs/common';
   import { UsersService } from './users.service';
   import { CreateUserDto } from './dtos/create-user.dto';
   import { UpdateUserDto } from './dtos/update-user.dto';
+  import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
   import {
     ApiTags,
     ApiOperation,
@@ -27,6 +29,7 @@ import {
     @ApiOperation({ summary: 'Obtener todos los usuarios' })
     @ApiResponse({ status: 200, description: 'Usuarios encontrados' })
     @Get()
+    @UseGuards(JwtAuthGuard)
     async findAll() {
       return this.usersService.findAll();
     }
@@ -36,6 +39,7 @@ import {
     @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
     @ApiParam({ name: 'id', description: 'ID del usuario', type: String })
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     async findOne(@Param('id') id: string) {
       const user = await this.usersService.findOne(id);
       if (!user) {
@@ -48,6 +52,7 @@ import {
     @ApiResponse({ status: 200, description: 'Usuario encontrado' })
     @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
     @Get('email/:email')
+    @UseGuards(JwtAuthGuard)
     async findByEmail(@Param('email') email: string) {
       return this.usersService.findByEmail(email);
     }
@@ -66,6 +71,7 @@ import {
     @ApiParam({ name: 'id', description: 'ID del usuario', type: String })
     @ApiBody({ type: UpdateUserDto })
     @Put(':id')
+    @UseGuards(JwtAuthGuard)
     async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
       const updatedUser = await this.usersService.update(id, updateUserDto);
       if (!updatedUser) {
@@ -79,6 +85,7 @@ import {
     @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
     @ApiParam({ name: 'id', description: 'ID del usuario', type: String })
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     async remove(@Param('id') id: string) {
       const deletedUser = await this.usersService.remove(id);
       if (!deletedUser) {
