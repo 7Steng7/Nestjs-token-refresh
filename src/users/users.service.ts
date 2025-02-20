@@ -5,6 +5,7 @@ import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { PasswordService } from '../services/password/password.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -59,5 +60,15 @@ export class UsersService {
       throw new NotFoundException('Usuario no encontrado');
     }
     return deletedUser;
+  }
+
+  async updatePassword(userId: string, newPassword: string): Promise<User> {
+    const user = await this.userModel.findById(userId).exec();
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    const hashedPassword = await this.passwordService.hashPassword(newPassword);
+    user.password = hashedPassword;
+    return user.save();
   }
 }

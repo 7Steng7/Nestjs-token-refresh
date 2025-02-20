@@ -1,13 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+import { MailService } from '../mail/mail.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -45,7 +47,24 @@ export class AuthService {
   }
 
   async logout(userId: string) {
-    // Aquí puedes implementar la lógica para invalidar el token (opcional)
     return { message: 'Sesión cerrada correctamente' };
+  }
+
+  async requestPasswordReset(email: string): Promise<void> {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    const token = this.jwtService.sign({ sub: user._id }, { expiresIn: '1h' });
+    await this.mailService.sendPasswordResetEmail(email, token);
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    const payload = this.jwtService.verify(token);
+    const userId = payload.sub;
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.usersService.updatePassword(userId, hashedPassword);
   }
 }
