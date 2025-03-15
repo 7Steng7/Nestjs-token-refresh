@@ -10,7 +10,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(
-      `mongodb+srv://${process.env.NAMEUSERDATABASE}:${process.env.PASSWORDDATABASE}@stengclusterblog.vgezi.mongodb.net/broers`,
+      `mongodb+srv://${process.env.NAMEUSERDATABASE}:${process.env.PASSWORDDATABASE}@stengclusterblog.vgezi.mongodb.net/api-token-refresh`,
     ),
     UsersModule,
     AuthModule,

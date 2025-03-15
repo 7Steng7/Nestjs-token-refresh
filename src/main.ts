@@ -7,8 +7,8 @@ async function bootstrap() {
 
   // Configuración de Swagger
   const config = new DocumentBuilder()
-    .setTitle('API NestJS Broers')
-    .setDescription('API prueba técnica Broers')
+    .setTitle('API NestJS-token-refresh')
+    .setDescription('Este proyecto es una API REST desarrollada con NestJS y Node.js, utilizando MongoDB como base de datos. Implementa un sistema de autenticación con JWT, gestión de usuarios y recuperación de contraseña mediante correo electrónico.')
     .setVersion('1.0')
     .addTag('users')
     .build();
